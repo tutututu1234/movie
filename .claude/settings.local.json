@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node init-db.js)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(node app.js)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d \"{\\\\\"phone\\\\\":\\\\\"13800138000\\\\\",\\\\\"password\\\\\":\\\\\"123456\\\\\"}\")",
+      "Bash(node seed-movies.js)",
+      "Bash(curl -s \"http://localhost:3000/api/movies?type=movie&page=1&pageSize=3\")",
+      "Bash(netstat -ano)",
+      "Bash(ipconfig)",
+      "Bash(curl -s -o NUL -w \"%{http_code}\" http://10.21.252.190:3000/api/health)",
+      "Bash(netsh advfirewall *)",
+      "Bash(curl -s \"https://api.themoviedb.org/3/movie/popular?api_key=efeaf4efa3995bcbdfa1469344e76d1c&language=zh-CN&page=1\")",
+      "Bash(curl -v --connect-timeout 5 \"https://api.themoviedb.org/3/movie/popular?api_key=efeaf4efa3995bcbdfa1469344e76d1c&language=zh-CN&page=1\")",
+      "Bash(curl -s --connect-timeout 5 \"https://api.douban.com/v2/movie/in_theaters\")",
+      "Bash(curl -s --connect-timeout 3 \"https://api.themoviedb.org/3/configuration?api_key=efeaf4efa3995bcbdfa1469344e76d1c\")",
+      "Bash(curl -L --connect-timeout 30 -o D:/2023.6/codes/movie/server/public/demo.mp4 \"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4\")",
+      "Bash(curl -L --connect-timeout 10 -o D:/2023.6/codes/movie/server/public/demo.mp4 \"https://media.w3.org/2010/05/sintel/trailer.mp4\")",
+      "Bash(curl *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d[0]['data'][0],indent=2,ensure_ascii=False\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\)[0]; print\\('keys:',list\\(d.keys\\(\\)\\)\\); print\\('data keys:',list\\(d['data'][0].keys\\(\\)\\) if d.get\\('data'\\) else 'no data'\\)\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(node *)",
+      "Bash(hvigorw assembleHap --no-daemon)",
+      "Bash(cmd.exe /c \"dir /s /b hvigorw* 2>nul\")",
+      "Bash(mysql *)",
+      "Bash(taskkill *)",
+      "Bash(cmd.exe *)"
+    ]
+  }
+}
