@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "观影追剧助手 - 你的私人影视收藏库"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "观影追剧助手主入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "观影追剧助手"
+    },
+    {
+      "name": "page_title_home",
+      "value": "首页"
+    },
+    {
+      "name": "page_title_favorites",
+      "value": "我的收藏"
+    },
+    {
+      "name": "page_title_profile",
+      "value": "个人中心"
+    },
+    {
+      "name": "tab_home",
+      "value": "首页"
+    },
+    {
+      "name": "tab_favorites",
+      "value": "收藏"
+    },
+    {
+      "name": "tab_profile",
+      "value": "我的"
+    },
+    {
+      "name": "form_update_card_name",
+      "value": "追剧更新卡片"
+    },
+    {
+      "name": "form_update_card_desc",
+      "value": "展示追剧中的当日更新剧集"
+    }
+  ]
+}

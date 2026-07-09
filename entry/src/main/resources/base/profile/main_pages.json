@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/LoginPage",
+    "pages/RegisterPage",
+    "pages/Index",
+    "pages/MovieDetailPage",
+    "pages/MovieListPage",
+    "pages/PlayerPage",
+    "pages/HistoryPage",
+    "pages/ReviewsPage"
+  ]
+}
