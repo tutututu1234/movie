@@ -3,6 +3,7 @@ import { MovieDetailViewModel } from '../viewmodel/MovieDetailViewModel';
 import { RatingBar } from '../components/RatingBar';
 import { promptAction } from '@kit.ArkUI';
 import { router } from '@kit.ArkUI';
+import { media } from '@kit.MediaKit';
 
 const VIDEO_URL = 'http://10.0.2.2:3000/video/demo.mp4';
 
@@ -18,6 +19,7 @@ struct MovieDetailPage {
   @State selectedSeason: number = 1;
   @State selectedEpisode: number = 1;
   @State isLoading: boolean = true;
+  @State showTrailer: boolean = false;
 
   private movieId: number = 0;
   private mediaType: MovieType = MovieType.MOVIE;
@@ -206,6 +208,23 @@ struct MovieDetailPage {
               this.VideoHeader()
               this.ActionButtons()
               this.InfoSection()
+              Button() {
+                Row({ space: 8 }) {
+                  Text('🎬 预告片').fontSize(16).fontColor('#FFFFFF')
+                }
+              }
+              .width('100%').height(44).backgroundColor('#FF6B35').borderRadius(8)
+              .margin({ left: 16, right: 16, top: 8 })
+              .onClick(() => { this.showTrailer = !this.showTrailer; })
+
+              if (this.showTrailer) {
+                Video({ src: VIDEO_URL, controller: new VideoController() })
+                  .width('100%').height(200)
+                  .objectFit(ImageFit.Contain).backgroundColor('#000000')
+                  .autoPlay(true).controls(true)
+                  .margin({ left: 16, right: 16, top: 8 })
+              }
+
               Button() {
                 Row({ space: 8 }) {
                   Text('▶ 播放正片').fontSize(18).fontColor('#FFFFFF').fontWeight(FontWeight.Bold)
