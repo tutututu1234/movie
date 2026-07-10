@@ -1,7 +1,8 @@
-import { MovieInfo, UserFavorite, UserReview, WatchHistory } from '../model/MovieModel';
+import { MovieInfo, MovieType, UserFavorite, UserReview, WatchHistory } from '../model/MovieModel';
 import { ProfileViewModel } from '../viewmodel/ProfileViewModel';
 import { MovieApi } from '../api/MovieApi';
 import { AuthManager } from '../utils/AuthManager';
+import { DateUtils } from '../utils/DateUtils';
 import { router } from '@kit.ArkUI';
 
 // ==================== 首页 Tab ====================
@@ -263,26 +264,45 @@ struct ProfileTab {
             }.width('100%').padding({ top: 12, bottom: 12 })
           }.width('100%').backgroundColor('#FFFFFF')
 
-          // 继续观看
+          // 继续观看 — 一键续看
           if (this.lastHistory) {
             Column({ space: 12 }) {
               Row({ space: 12 }) {
                 Image(this.lastHistory.posterPath).width(80).height(110).objectFit(ImageFit.Cover).borderRadius(6)
                 Column({ space: 8 }) {
                   Text(this.lastHistory.movieTitle).fontSize(16).fontWeight(FontWeight.Medium)
-                  Text('已看 ' + String(Math.floor(this.lastHistory.progress)) + '%').fontSize(12).fontColor('#999999')
-                  Button('一键续看').type(ButtonType.Capsule).backgroundColor('#4A90D9')
+                  if (this.lastHistory.episodeName) {
+                    Text(this.lastHistory.episodeName).fontSize(13).fontColor('#4A90D9')
+                  }
+                  Row({ space: 8 }) {
+                    Text('已看 ' + String(Math.floor(this.lastHistory.progress)) + '%').fontSize(12).fontColor('#999999')
+                    Text('·').fontSize(12).fontColor('#DDDDDD')
+                    Text(DateUtils.getRelativeTime(this.lastHistory.lastWatchTime)).fontSize(12).fontColor('#999999')
+                  }
+                  Button('一键续看').type(ButtonType.Capsule).backgroundColor('#FF6B35').fontSize(13)
                     .onClick(() => {
                       if (this.lastHistory) {
-                        router.pushUrl({
-                          url: 'pages/MovieDetailPage',
-                          params: {
-                            movieId: this.lastHistory.movieId,
-                            mediaType: this.lastHistory.mediaType,
-                            seasonNumber: this.lastHistory.seasonNumber,
-                            episodeNumber: this.lastHistory.episodeNumber
-                          }
-                        });
+                        if (this.lastHistory.mediaType === MovieType.TV || this.lastHistory.episodeName) {
+                          router.pushUrl({
+                            url: 'pages/MovieDetailPage',
+                            params: {
+                              movieId: this.lastHistory.movieId,
+                              mediaType: this.lastHistory.mediaType,
+                              seasonNumber: this.lastHistory.seasonNumber,
+                              episodeNumber: this.lastHistory.episodeNumber
+                            }
+                          });
+                        } else {
+                          router.pushUrl({
+                            url: 'pages/PlayerPage',
+                            params: {
+                              movieTitle: this.lastHistory.movieTitle,
+                              posterPath: this.lastHistory.posterPath,
+                              movieId: this.lastHistory.movieId,
+                              mediaType: this.lastHistory.mediaType
+                            }
+                          });
+                        }
                       }
                     })
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
