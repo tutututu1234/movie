@@ -20,6 +20,7 @@ struct MovieDetailPage {
   @State selectedEpisode: number = 1;
   @State isLoading: boolean = true;
   @State showTrailer: boolean = false;
+  @State hasExistingReview: boolean = false;
 
   private movieId: number = 0;
   private mediaType: MovieType = MovieType.MOVIE;
@@ -44,7 +45,8 @@ struct MovieDetailPage {
     };
     this.viewModel.onFavoriteChanged = (isFav: boolean) => { this.isFavorite = isFav; };
     this.viewModel.onReviewLoaded = (review: UserReview | null) => {
-      if (review) { this.userRating = review.rating; this.reviewText = review.review; }
+      if (review) { this.userRating = review.rating; this.reviewText = review.review; this.hasExistingReview = true; }
+      else { this.userRating = 0; this.reviewText = ''; this.hasExistingReview = false; }
     };
     this.viewModel.onError = (msg: string) => { promptAction.showToast({ message: msg }); };
     this.viewModel.loadMovieDetail(this.movieId, this.mediaType);
@@ -103,8 +105,8 @@ struct MovieDetailPage {
 
       Button() {
         Column({ space: 2 }) {
-          Text('★').fontSize(20).fontColor('#FFB800')
-          Text('评分').fontSize(11).fontColor('#FFB800')
+          Text('★').fontSize(20).fontColor(this.hasExistingReview ? '#FF6B35' : '#FFB800')
+          Text(this.hasExistingReview ? '已评价' : '评分').fontSize(11).fontColor(this.hasExistingReview ? '#FF6B35' : '#FFB800')
         }
       }
       .type(ButtonType.Capsule).backgroundColor('#FFFFFF').layoutWeight(1).height(56)
@@ -184,13 +186,20 @@ struct MovieDetailPage {
   ReviewDialog() {
     Column({ space: 16 }) {
       Text('评分与短评').fontSize(18).fontWeight(FontWeight.Bold).fontColor('#333333')
+      if (this.hasExistingReview) {
+        Text('当前评分: ' + String(this.userRating) + '分').fontSize(14).fontColor('#FFB800')
+      }
       RatingBar({ rating: this.userRating, onRatingChange: (r: number) => { this.userRating = r; } })
-      TextArea({ placeholder: '短评...', text: this.reviewText }).height(100).backgroundColor('#F5F5F5')
+      TextArea({ placeholder: this.hasExistingReview ? '修改短评...' : '写短评...', text: this.reviewText }).height(100).backgroundColor('#F5F5F5')
         .onChange((v: string) => { this.reviewText = v; })
       Row({ space: 12 }) {
         Button('取消').type(ButtonType.Capsule).backgroundColor('#999999').layoutWeight(1)
           .onClick(() => { this.showReviewDialog = false; })
-        Button('提交').type(ButtonType.Capsule).backgroundColor('#4A90D9').layoutWeight(1)
+        if (this.hasExistingReview) {
+          Button('删除评价').type(ButtonType.Capsule).backgroundColor('#FF4444')
+            .onClick(() => { this.deleteReview(); })
+        }
+        Button(this.hasExistingReview ? '更新' : '提交').type(ButtonType.Capsule).backgroundColor('#4A90D9').layoutWeight(1)
           .onClick(() => { this.submitReview(); })
       }.width('100%')
     }
@@ -292,7 +301,13 @@ struct MovieDetailPage {
   private async submitReview(): Promise<void> {
     if (this.userRating === 0) { promptAction.showToast({ message: '请先评分' }); return; }
     const ok = await this.viewModel.submitReview(this.userRating, this.reviewText);
-    promptAction.showToast({ message: ok ? '提交成功' : '失败' });
-    if (ok) this.showReviewDialog = false;
+    promptAction.showToast({ message: ok ? (this.hasExistingReview ? '更新成功' : '提交成功') : '失败' });
+    if (ok) { this.hasExistingReview = true; this.showReviewDialog = false; }
+  }
+
+  private async deleteReview(): Promise<void> {
+    const ok = await this.viewModel.deleteReview();
+    promptAction.showToast({ message: ok ? '已删除评价' : '删除失败' });
+    if (ok) { this.userRating = 0; this.reviewText = ''; this.hasExistingReview = false; this.showReviewDialog = false; }
   }
 }
