@@ -1,3 +1,22 @@
 {
-  "forms": []
+  "forms": [
+    {
+      "name": "UpdateCard",
+      "displayName": "今日追剧更新",
+      "description": "展示正在追剧的当日更新剧集",
+      "src": "./ets/servicecard/UpdateCardFormAbility.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 360,
+        "autoDesignWidth": true
+      },
+      "colorMode": "auto",
+      "isDefault": true,
+      "updateEnabled": true,
+      "scheduledUpdateTime": "10:30",
+      "updateDuration": 1,
+      "defaultDimension": "2*2",
+      "supportDimensions": ["2*2", "2*4"]
+    }
+  ]
 }
